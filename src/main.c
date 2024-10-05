@@ -1,23 +1,31 @@
-#include <getopt.h>
-#include <stdio.h>
+#include "parse_args.h"
 
 int main(int argc, char **argv) {
-  /* TODO: input validation */
-  if (argc != 2) {
-    return 1;
-  }
-  const char *file = argv[1];
+    char *filename;
 
-  FILE *fp;
-  fp = fopen(file, "r");
+    int to_lex = 0;
+    int to_parse = 0;
+    int to_codegen = 0;
+    int *flags[] = {&to_lex, &to_parse, &to_codegen};
 
-  /* lex */
+    parse_args(argc, argv, &filename, flags);
 
-  /* parse */
+    /* preprocess */
 
-  /* assemble */
-  
-  fclose(fp);
+    /* lex */
+    if (to_lex) {
+        return 0;
+    }
+    /* parse */
+    if (to_parse) {
+        return 0;
+    }
 
-  return 0;
+    /* assemble */
+    if (to_codegen) {
+        return 0;
+    }
+
+    /* emit code */
+    return 0;
 }
