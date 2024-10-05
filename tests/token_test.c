@@ -89,6 +89,36 @@ void test_get_tokens() {
     TEST_ASSERT_NULL(p->next);
 }
 
+void test_get_tokens_multiple_lines() {
+    char *input = "int main() {\n\n}";
+    struct linked_list *result = get_tokens(input);
+    struct node *p = result->head;
+
+    TEST_ASSERT_EQUAL(keyword, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "int"));
+    p = p->next;
+    
+    TEST_ASSERT_EQUAL(identifier, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "main"));
+    p = p->next;
+
+    TEST_ASSERT_EQUAL(open_parenthesis, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "("));
+    p = p->next;
+
+    TEST_ASSERT_EQUAL(close_parenthesis, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, ")"));
+    p = p->next;
+
+    TEST_ASSERT_EQUAL(open_brace, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "{"));
+    p = p->next;
+
+    TEST_ASSERT_EQUAL(close_brace, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "}"));
+    TEST_ASSERT_NULL(p->next);
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(test_get_token_keyword);
@@ -101,5 +131,6 @@ int main() {
     RUN_TEST(test_get_token_semicolon);
     RUN_TEST(test_get_token_undefined);
     RUN_TEST(test_get_tokens);
+    RUN_TEST(test_get_tokens_multiple_lines);
     return UNITY_END();
 }

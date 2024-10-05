@@ -156,7 +156,7 @@ int check_identifier(char *p, struct token *token) {
 int check_open_parenthesis(char *p, struct token *token) {
     if (*p == '(') {
         token->token_type = open_parenthesis;
-        token->value = p;
+        token->value = "(";
         return 0;
     };
 
@@ -166,7 +166,7 @@ int check_open_parenthesis(char *p, struct token *token) {
 int check_close_parenthesis(char *p, struct token *token) {
     if (*p == ')') {
         token->token_type = close_parenthesis;
-        token->value = p;
+        token->value = ")";
         return 0;
     };
 
@@ -176,7 +176,7 @@ int check_close_parenthesis(char *p, struct token *token) {
 int check_open_brace(char *p, struct token *token) {
     if (*p == '{') {
         token->token_type = open_brace;
-        token->value = p;
+        token->value = "{";
         return 0;
     };
 
@@ -186,7 +186,7 @@ int check_open_brace(char *p, struct token *token) {
 int check_close_brace(char *p, struct token *token) {
     if (*p == '}') {
         token->token_type = close_brace;
-        token->value = p;
+        token->value = "}";
         return 0;
     };
 
