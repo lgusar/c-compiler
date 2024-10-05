@@ -1,7 +1,13 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "../unity/src/unity.h"
+
 #include "../src/parse_args.h"
+
+void setUp() {}
+
+void tearDown() {}
 
 void test_required_parameter() {
     int argc = 2;
@@ -15,8 +21,7 @@ void test_required_parameter() {
 
     int ret = parse_args(argc, argv, &filename, flags);
 
-    assert(ret == 0);
-    printf("test_required_parameter passed\n"); 
+    TEST_ASSERT_EQUAL(0, ret);
 }
 
 void test_no_required_parameter() {
@@ -31,8 +36,7 @@ void test_no_required_parameter() {
 
     int ret = parse_args(argc, argv, &filename, flags);
 
-    assert(ret == 1);
-    printf("test_no_required_parameter passed\n"); 
+    TEST_ASSERT_EQUAL(1, ret);
 }
 
 void test_one_option_and_parameter() {
@@ -47,17 +51,14 @@ void test_one_option_and_parameter() {
 
     int ret = parse_args(argc, argv, &filename, flags);
 
-    assert(ret == 0);
-    assert(to_lex == 1);
-    printf("test_one_option_and_parameter passed\n"); 
+    TEST_ASSERT_EQUAL(0, ret);
+    TEST_ASSERT_EQUAL(1, to_lex);
 }
 
 int main() {
-    printf("STARTING TESTS\n\n");
-    test_required_parameter();
-    test_required_parameter();
-    test_no_required_parameter();
-    test_one_option_and_parameter();
-    printf("ALL TESTS SUCCESSFUL\n\n");
-    return 0;
+    UNITY_BEGIN();
+    RUN_TEST(test_required_parameter);
+    RUN_TEST(test_no_required_parameter);
+    RUN_TEST(test_one_option_and_parameter);
+    return UNITY_END();
 }
