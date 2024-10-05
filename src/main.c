@@ -1,4 +1,7 @@
+#include <stdio.h>
+
 #include "parse_args.h"
+#include "file_io.h"
 
 int main(int argc, char **argv) {
     char *filename;
@@ -8,7 +11,16 @@ int main(int argc, char **argv) {
     int to_codegen = 0;
     int *flags[] = {&to_lex, &to_parse, &to_codegen};
 
-    parse_args(argc, argv, &filename, flags);
+    int ret;
+
+    ret = parse_args(argc, argv, &filename, flags);
+    if (ret != 0) {
+        fprintf(stderr, "parse_args failed\n");
+        return 1;
+    }
+    
+    char *file;
+    ret = read_from_file(filename, &file);
 
     /* preprocess */
 
