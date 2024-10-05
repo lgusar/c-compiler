@@ -20,8 +20,8 @@ struct token {
     char *value;
 };
 
-struct token get_token(char **string);
+int get_token(char **string, struct token *result);
 
-struct linked_list *get_tokens(char *string);
+int get_tokens(char *string, struct linked_list *result);
 
 #endif /* _TOKEN_H */

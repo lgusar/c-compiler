@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -16,69 +17,76 @@ int check_semicolon(char *p, struct token *token);
 
 char *get_word(char *p);
 
-char *keywords[] = {"int"};
+char *keywords[] = {"int", "void", "return"};
 char keywords_count = sizeof(keywords) / sizeof(*keywords);
 
-struct token get_token(char **string) {
+int get_token(char **string, struct token *result) {
     char **p = string;
-    struct token result = {
-        .token_type = undefined,
-        .value = "",
-    };
 
     while (**p == ' ' || **p == '\n') {
         *p += 1;
     }
 
-    if (check_keyword(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (**p == EOF) {
+        return 1;
     }
 
-    if (check_identifier(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_keyword(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    if (check_open_parenthesis(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_identifier(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    if (check_close_parenthesis(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_open_parenthesis(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    if (check_open_brace(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_close_parenthesis(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    if (check_close_brace(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_open_brace(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    if (check_constant(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_close_brace(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    if (check_semicolon(*p, &result) == 0) {
-        *p += strlen(result.value);
-        return result;
+    if (check_constant(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
     }
 
-    return result;
+    if (check_semicolon(*p, result) == 0) {
+        *p += strlen(result->value);
+        return 0;
+    }
+
+    result->token_type = undefined;
+
+    fprintf(stderr, "unrecognized token\n");
+    return -1;
 }
 
-struct linked_list *get_tokens(char *string) {
-    struct linked_list *tokens = malloc(sizeof(struct linked_list));
+int get_tokens(char *string, struct linked_list *tokens) {
     struct node *last = NULL;
 
     struct token token;
-    while ((token = get_token(&string)).token_type != undefined) {
+    int status;
+    while ((status = get_token(&string, &token)) == 0) {
+        if (status == -1) {
+            fprintf(stderr, "get_token failed\n");
+            return 1;
+        }
         struct token *tmp = malloc(sizeof(struct token));
         *tmp = token;
 
@@ -95,7 +103,7 @@ struct linked_list *get_tokens(char *string) {
         }
     }
 
-    return tokens;
+    return 0;
 }
 
 char *get_word(char *string) {
