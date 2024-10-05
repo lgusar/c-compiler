@@ -12,9 +12,9 @@ test-run:
 	./test
 
 test-clean:
-	rm test
+	rm -f test
 
 test: test-clean test-build test-run
 
 clean:
-	rm -rf main
+	rm -f main
