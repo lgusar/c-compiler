@@ -3,6 +3,8 @@
 #include "parse_args.h"
 #include "file_io.h"
 
+#include "lexer.h"
+
 int main(int argc, char **argv) {
     char *filename;
 
@@ -24,6 +26,11 @@ int main(int argc, char **argv) {
 
     /* preprocess */
 
+    struct linked_list tokens;
+    ret = lex(file, tokens);
+    if (ret != 0) {
+        fprintf(stderr, "lex failed\n");
+    }
     /* lex */
     if (to_lex) {
         return 0;

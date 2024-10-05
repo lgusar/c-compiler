@@ -2,3 +2,5 @@
 main
 .clang-format
 test
+test_token
+test_parse_args
