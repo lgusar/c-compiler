@@ -78,21 +78,13 @@ void test_get_token_constant() {
 }
 
 void test_get_token_semicolon() {
-    char *input = ":";
+    char *input = ";";
     struct token result;
     int status = get_token(&input, &result);
 
     TEST_ASSERT_EQUAL(semicolon, result.token_type);
-    TEST_ASSERT_EQUAL(0, strcmp(":", result.value));
+    TEST_ASSERT_EQUAL(0, strcmp(";", result.value));
     TEST_ASSERT_EQUAL(0, status);
-}
-
-void test_get_token_undefined() {
-    char *input = "";
-    struct token result;
-    int status = get_token(&input, &result);
-    TEST_ASSERT_EQUAL(undefined, result.token_type);
-    TEST_ASSERT_EQUAL(-1, status);
 }
 
 void test_get_token_invalid() {
@@ -154,6 +146,14 @@ void test_get_tokens_multiple_lines() {
     TEST_ASSERT_NULL(p->next);
 }
 
+void test_get_tokens_all_token_types() {
+    char *input = "int main(void) {\n\treturn 2;\n}";
+    struct linked_list result;
+    int status = get_tokens(input, &result);
+
+    TEST_ASSERT_EQUAL(0, status);
+}
+
 int main() {
     UNITY_BEGIN();
     RUN_TEST(test_get_token_keyword);
@@ -164,9 +164,9 @@ int main() {
     RUN_TEST(test_get_token_close_brace);
     RUN_TEST(test_get_token_constant);
     RUN_TEST(test_get_token_semicolon);
-    RUN_TEST(test_get_token_undefined);
     RUN_TEST(test_get_token_invalid);
     RUN_TEST(test_get_tokens);
     RUN_TEST(test_get_tokens_multiple_lines);
+    RUN_TEST(test_get_tokens_all_token_types);
     return UNITY_END();
 }
