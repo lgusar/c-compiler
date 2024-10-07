@@ -1,6 +1,8 @@
 /compiler-tests
-main
+
 .clang-format
+
 test
-test_token
-test_parse_args
+test_*
+
+main
