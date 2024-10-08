@@ -23,11 +23,29 @@ char keywords_count = sizeof(keywords) / sizeof(*keywords);
 int get_token(char **string, struct token *result) {
     char **p = string;
 
-    while (**p == ' ' || **p == '\n') {
+    /* TODO: add support for comments */
+
+    while (**p == ' ' || **p == '\n' || **p == '\t') {
         *p += 1;
     }
 
-    if (**p == EOF) {
+    if (strncmp(*p, "//", strlen("//")) == 0) {
+        while (**p != '\n' && **p != EOF && **p != '\0') {
+            *p += 1;
+        }
+    }
+
+    if (strncmp(*p, "/*", strlen("/*")) == 0) {
+        while (**p != EOF && **p != '\0') {
+            *p += 1;
+            if (**p == '*' && *(*p + 1) == '/') {
+                *p += 2;
+                break;
+            }
+        }
+    }
+
+    if (**p == EOF || **p == '\0') {
         return 1;
     }
 
@@ -82,7 +100,7 @@ int get_tokens(char *string, struct linked_list *tokens) {
 
     struct token token;
     int status;
-    while ((status = get_token(&string, &token)) == 0) {
+    while ((status = get_token(&string, &token)) != 1) {
         if (status == -1) {
             fprintf(stderr, "get_token failed\n");
             return 1;
@@ -213,7 +231,7 @@ int check_constant(char *p, struct token *token) {
 }
 
 int check_semicolon(char *p, struct token *token) {
-    if (*p == ':') {
+    if (*p == ';') {
         token->token_type = semicolon;
         token->value = p;
         return 0;
