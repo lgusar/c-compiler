@@ -6,6 +6,9 @@
 #include "linked_list.h"
 #include "token.h"
 
+int clear_whitespace(char **p);
+int check_single_line_comment(char **p);
+int check_multi_line_comment(char **p);
 int check_keyword(char *p, struct token *token);
 int check_identifier(char *p, struct token *token);
 int check_open_parenthesis(char *p, struct token *token);
@@ -23,26 +26,21 @@ char keywords_count = sizeof(keywords) / sizeof(*keywords);
 int get_token(char **string, struct token *result) {
     char **p = string;
 
-    /* TODO: add support for comments */
+    result->token_type = undefined;
 
-    while (**p == ' ' || **p == '\n' || **p == '\t') {
-        *p += 1;
+    if (clear_whitespace(p) == 0) {
+        result = NULL;
+        return 0;
     }
 
-    if (strncmp(*p, "//", strlen("//")) == 0) {
-        while (**p != '\n' && **p != EOF && **p != '\0') {
-            *p += 1;
-        }
+    if (check_single_line_comment(p) == 0) {
+        result = NULL;
+        return 0;
     }
 
-    if (strncmp(*p, "/*", strlen("/*")) == 0) {
-        while (**p != EOF && **p != '\0') {
-            *p += 1;
-            if (**p == '*' && *(*p + 1) == '/') {
-                *p += 2;
-                break;
-            }
-        }
+    if (check_multi_line_comment(p) == 0) {
+        result = NULL;
+        return 0;
     }
 
     if (**p == EOF || **p == '\0') {
@@ -95,6 +93,46 @@ int get_token(char **string, struct token *result) {
     return -1;
 }
 
+int clear_whitespace(char **p) {
+    if (**p == ' ' || **p == '\n' || **p == '\t') {
+        while (**p == ' ' || **p == '\n' || **p == '\t') {
+            *p += 1;
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
+int check_single_line_comment(char **p) {
+    if (strncmp(*p, "//", strlen("//")) == 0) {
+        while (**p != '\n' && **p != EOF && **p != '\0') {
+            *p += 1;
+        }
+        
+        return 0;
+    }
+
+    return 1;
+}
+
+int check_multi_line_comment(char **p) {
+    if (strncmp(*p, "/*", strlen("/*")) == 0) {
+        while (**p != EOF && **p != '\0') {
+            *p += 1;
+            if (**p == '*' && *(*p + 1) == '/') {
+                *p += 2;
+                break;
+            }
+        }
+
+        return 0;
+    }
+
+    return 1;
+}
+
 int get_tokens(char *string, struct linked_list *tokens) {
     struct node *last = NULL;
 
@@ -105,6 +143,8 @@ int get_tokens(char *string, struct linked_list *tokens) {
             fprintf(stderr, "get_token failed\n");
             return 1;
         }
+        if (token.token_type == undefined)
+            continue;
         struct token *tmp = malloc(sizeof(struct token));
         *tmp = token;
 
@@ -125,31 +165,35 @@ int get_tokens(char *string, struct linked_list *tokens) {
 }
 
 char *get_word(char *string) {
-    char *result = malloc(sizeof(char));
-    char *p = result;
-    while (isalpha(*string) || *string == '\0') {
-        *p = *string;
-        if (*string == '\0') {
-            break;
-        }
-        string++;
+    int n = 0;
+    char *p = string;
+    while (isalpha(*p) || *p == '\0') {
+        n++;
         p++;
     }
+
+    char *result = malloc(sizeof(char) * (n + 1));
+    strncpy(result, string, n);
+    result[n] = '\0';
 
     return result;
 }
 
 char *get_constant(char *string) {
-    char *result = malloc(sizeof(char));
-    char *p = result;
-    while (isdigit(*string) || *string == '\0') {
-        *p = *string;
-        if (*string == '\0') {
-            break;
-        }
-        string++;
+    int n = 0;
+    char *p = string;
+    while (isdigit(*p) || *p == '\0') {
+        n++;
         p++;
     }
+
+    if (isalpha(*p)) {
+        return NULL;
+    }
+
+    char *result = malloc(sizeof(char) * (n + 1));
+    strncpy(result, string, n);
+    result[n] = '\0';
 
     return result;
 }
