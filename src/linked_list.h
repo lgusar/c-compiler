@@ -10,4 +10,6 @@ struct linked_list {
     struct node *head;
 };
 
+int add(struct linked_list *list, void *val);
+
 #endif /* _LINKED_LIST_H */
