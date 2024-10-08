@@ -23,6 +23,10 @@ int main(int argc, char **argv) {
     
     char *file;
     ret = read_from_file(filename, &file);
+    if (ret != 0) {
+        fprintf(stderr, "read_from_file_failed\n");
+        return 1;
+    }
 
     /* preprocess */
 
@@ -30,6 +34,7 @@ int main(int argc, char **argv) {
     ret = lex(file, tokens);
     if (ret != 0) {
         fprintf(stderr, "lex failed\n");
+        return 1;
     }
     /* lex */
     if (to_lex) {
