@@ -23,8 +23,26 @@ char keywords_count = sizeof(keywords) / sizeof(*keywords);
 int get_token(char **string, struct token *result) {
     char **p = string;
 
+    /* TODO: add support for comments */
+
     while (**p == ' ' || **p == '\n' || **p == '\t') {
         *p += 1;
+    }
+
+    if (strncmp(*p, "//", strlen("//")) == 0) {
+        while (**p != '\n' && **p != EOF && **p != '\0') {
+            *p += 1;
+        }
+    }
+
+    if (strncmp(*p, "/*", strlen("/*")) == 0) {
+        while (**p != EOF && **p != '\0') {
+            *p += 1;
+            if (**p == '*' && *(*p + 1) == '/') {
+                *p += 2;
+                break;
+            }
+        }
     }
 
     if (**p == EOF || **p == '\0') {
