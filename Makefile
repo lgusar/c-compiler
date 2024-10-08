@@ -28,7 +28,7 @@ test-integration: test-file_io
 
 test: test-clean test-build test-run
 
-main-clean:
-	rm -f main
+lgcc-clean:
+	rm -f lgcc
 
-clean: main-clean test-clean
+clean: lgcc-clean test-clean
