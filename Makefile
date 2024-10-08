@@ -4,7 +4,7 @@ TESTFLAGS = -D UNITY_OUTPUT_COLOR
 UNITY_SRC = ./unity/src
 
 all:
-	gcc $(CFLAGS) -o main src/main.c src/lexer.c src/token.c src/parse_args.c src/file_io.c
+	gcc $(CFLAGS) -o lgcc src/main.c src/lexer.c src/token.c src/parse_args.c src/file_io.c
 
 test-parse_args:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_parse_args tests/parse_args_test.c src/parse_args.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
