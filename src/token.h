@@ -24,4 +24,6 @@ int get_token(char **string, struct token *result);
 
 int get_tokens(char *string, struct linked_list *result);
 
+char *get_token_type(enum token_type);
+
 #endif /* _TOKEN_H */

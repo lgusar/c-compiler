@@ -12,11 +12,15 @@ test-parse_args:
 test-token:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_token tests/token_test.c src/token.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
 
-test-build: test-parse_args test-token
+test-parser:
+	gcc $(CFLAGS) $(TESTFLAGS) -o test_parser tests/parser_test.c src/parser.c src/token.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
+
+test-build: test-parse_args test-token test-parser
 
 test-run: 
 	./test_parse_args
 	./test_token
+	./test_parser
 
 test-file_io: src/file_io.c tests/integration/file_io_test.c
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_file_io tests/integration/file_io_test.c src/file_io.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)

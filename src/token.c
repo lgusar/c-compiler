@@ -283,3 +283,19 @@ int check_semicolon(char *p, struct token *token) {
 
     return 1;
 }
+
+char *get_token_type(enum token_type token_type) {
+    switch(token_type) {
+        case keyword: return "keyword";;
+        case identifier: return "identifier";
+        case open_parenthesis: return "open_parenthesis";
+        case close_parenthesis: return "close_parenthesis";
+        case open_brace: return "open_brace"; 
+        case close_brace: return "close_brace"; 
+        case constant: return "constant";
+        case semicolon: return "semicolon";
+        case undefined: return "undefined";
+    }
+
+    return "";
+}
