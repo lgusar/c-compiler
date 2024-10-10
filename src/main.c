@@ -30,9 +30,8 @@ int main(int argc, char **argv) {
 
     /* preprocess */
 
-    struct linked_list tokens;
-    ret = lex(file, tokens);
-    if (ret != 0) {
+    struct linked_list *tokens = lex(file);
+    if (tokens == NULL) {
         fprintf(stderr, "lex failed\n");
         return 1;
     }

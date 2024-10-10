@@ -4,13 +4,13 @@ TESTFLAGS = -D UNITY_OUTPUT_COLOR
 UNITY_SRC = ./unity/src
 
 all:
-	gcc $(CFLAGS) -o lgcc src/main.c src/lexer.c src/token.c src/parse_args.c src/file_io.c
+	gcc $(CFLAGS) -o lgcc src/main.c src/lexer.c src/token.c src/parse_args.c src/file_io.c src/linked_list.c
 
 test-parse_args:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_parse_args tests/parse_args_test.c src/parse_args.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
 
 test-token:
-	gcc $(CFLAGS) $(TESTFLAGS) -o test_token tests/token_test.c src/token.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
+	gcc $(CFLAGS) $(TESTFLAGS) -o test_token tests/token_test.c src/token.c src/linked_list.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
 
 test-linked_list:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_linked_list tests/unit/linked_list_test.c src/linked_list.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
