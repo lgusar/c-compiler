@@ -7,13 +7,33 @@ void setUp() {}
 
 void tearDown() {}
 
-void test_get_token_keyword() {
+void test_get_token_int() {
     char *input = "int";
     struct token result;
     int status = get_token(&input, &result);
 
-    TEST_ASSERT_EQUAL(keyword, result.token_type);
+    TEST_ASSERT_EQUAL(k_int, result.token_type);
     TEST_ASSERT_EQUAL(0, strcmp("int", result.value));
+    TEST_ASSERT_EQUAL(0, status);
+}
+
+void test_get_token_return() {
+    char *input = "return";
+    struct token result;
+    int status = get_token(&input, &result);
+
+    TEST_ASSERT_EQUAL(k_return, result.token_type);
+    TEST_ASSERT_EQUAL(0, strcmp("return", result.value));
+    TEST_ASSERT_EQUAL(0, status);
+}
+
+void test_get_token_void() {
+    char *input = "void";
+    struct token result;
+    int status = get_token(&input, &result);
+
+    TEST_ASSERT_EQUAL(k_void, result.token_type);
+    TEST_ASSERT_EQUAL(0, strcmp("void", result.value));
     TEST_ASSERT_EQUAL(0, status);
 }
 
@@ -104,7 +124,7 @@ void test_get_tokens() {
     TEST_ASSERT_EQUAL(0, status);
 
     struct node *p = result->head;
-    TEST_ASSERT_EQUAL(keyword, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(k_int, ((struct token *)p->val)->token_type);
     TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "int"));
     p = p->next;
     TEST_ASSERT_EQUAL(identifier, ((struct token *)p->val)->token_type);
@@ -121,7 +141,7 @@ void test_get_tokens_multiple_lines() {
     TEST_ASSERT_EQUAL(0, status);
 
     struct node *p = result->head;
-    TEST_ASSERT_EQUAL(keyword, ((struct token *)p->val)->token_type);
+    TEST_ASSERT_EQUAL(k_int, ((struct token *)p->val)->token_type);
     TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "int"));
     p = p->next;
 
@@ -185,7 +205,9 @@ void test_get_tokens_multiline_comment_without_end_backslash() {
 
 int main() {
     UNITY_BEGIN();
-    RUN_TEST(test_get_token_keyword);
+    RUN_TEST(test_get_token_int);
+    RUN_TEST(test_get_token_return);
+    RUN_TEST(test_get_token_void);
     RUN_TEST(test_get_token_identifier);
     RUN_TEST(test_get_token_open_parenthesis);
     RUN_TEST(test_get_token_close_parenthesis);

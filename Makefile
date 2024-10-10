@@ -12,17 +12,13 @@ test-parse_args:
 test-token:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_token tests/token_test.c src/token.c src/linked_list.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
 
-<<<<<<< HEAD
 test-parser:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_parser tests/parser_test.c src/parser.c src/token.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
 
-test-build: test-parse_args test-token test-parser
-=======
 test-linked_list:
 	gcc $(CFLAGS) $(TESTFLAGS) -o test_linked_list tests/unit/linked_list_test.c src/linked_list.c $(UNITY_SRC)/unity.c -I./src -I$(UNITY_SRC)
 
-test-build: test-parse_args test-token test-linked_list
->>>>>>> master
+test-build: test-parse_args test-token test-parser test-linked_list
 
 test-run: 
 	./test_parse_args

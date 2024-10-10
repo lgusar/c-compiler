@@ -4,7 +4,9 @@
 #include "linked_list.h"
 
 enum token_type {
-    keyword,
+    k_int,
+    k_return,
+    k_void,
     identifier,
     open_parenthesis,
     close_parenthesis,

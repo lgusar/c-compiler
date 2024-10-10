@@ -20,7 +20,7 @@ int check_semicolon(char *p, struct token *token);
 
 char *get_word(char *p);
 
-char *keywords[] = {"int", "void", "return"};
+char *keywords[] = {"int", "return", "void"};
 char keywords_count = sizeof(keywords) / sizeof(*keywords);
 
 int get_token(char **string, struct token *result) {
@@ -193,7 +193,8 @@ int check_keyword(char *p, struct token *token) {
     char *word = get_word(p);
     for (int i = 0; i < keywords_count; i++) {
         if (strcmp(word, keywords[i]) == 0) {
-            token->token_type = keyword;
+            /* i corresponds to correct keyword token_type*/
+            token->token_type = i;
             token->value = word;
 
             return 0;
@@ -277,7 +278,9 @@ int check_semicolon(char *p, struct token *token) {
 
 char *get_token_type(enum token_type token_type) {
     switch(token_type) {
-        case keyword: return "keyword";;
+        case k_int: return "int"; 
+        case k_return: return "return";
+        case k_void: return "void";
         case identifier: return "identifier";
         case open_parenthesis: return "open_parenthesis";
         case close_parenthesis: return "close_parenthesis";
