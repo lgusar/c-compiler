@@ -1,9 +1,12 @@
 #include <stdio.h>
 
-#include "parse_args.h"
 #include "file_io.h"
+#include "parse_args.h"
 
 #include "lexer.h"
+#include "parser.h"
+
+#include "token.h"
 
 int main(int argc, char **argv) {
     char *filename;
@@ -20,7 +23,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "parse_args failed\n");
         return 1;
     }
-    
+
     char *file;
     ret = read_from_file(filename, &file);
     if (ret != 0) {
@@ -30,16 +33,25 @@ int main(int argc, char **argv) {
 
     /* preprocess */
 
+    /* lex */
     struct linked_list *tokens = lex(file);
     if (tokens == NULL) {
         fprintf(stderr, "lex failed\n");
         return 1;
     }
-    /* lex */
+
+    struct node *p = tokens->head;
+    while (p != NULL) {
+        printf("%s\n", ((struct token *)(p->val))->value);
+        p = p->next;
+    }
+
     if (to_lex) {
         return 0;
     }
+
     /* parse */
+    parse(tokens);
     if (to_parse) {
         return 0;
     }

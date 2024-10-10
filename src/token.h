@@ -19,6 +19,7 @@ enum token_type {
 
 struct token {
     enum token_type token_type;
+    /* TODO: convert to void * */
     char *value;
 };
 

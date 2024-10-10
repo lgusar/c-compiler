@@ -269,7 +269,7 @@ int check_constant(char *p, struct token *token) {
 int check_semicolon(char *p, struct token *token) {
     if (*p == ';') {
         token->token_type = semicolon;
-        token->value = p;
+        token->value = ";";
         return 0;
     };
 

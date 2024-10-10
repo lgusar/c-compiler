@@ -23,7 +23,7 @@ struct node *create_node(enum token_type type, char *token_value) {
 
 void test_parser() {
     struct linked_list tokens;
-    tokens.head = create_node(keyword, "int");
+    tokens.head = create_node(k_int, "int");
     struct node *p = tokens.head;
 
     p->next = create_node(identifier, "main");
@@ -32,7 +32,7 @@ void test_parser() {
     p->next = create_node(open_parenthesis, "(");
     p = p->next;
 
-    p->next = create_node(keyword, "void");
+    p->next = create_node(k_void, "void");
     p = p->next;
 
     p->next = create_node(close_parenthesis, ")");
@@ -41,7 +41,7 @@ void test_parser() {
     p->next = create_node(open_brace, "{");
     p = p->next;
 
-    p->next = create_node(keyword, "return");
+    p->next = create_node(k_return, "return");
     p = p->next;
 
     p->next = create_node(constant, "2");
@@ -53,8 +53,8 @@ void test_parser() {
     p->next = create_node(close_brace, "}");
     p = p->next;
 
-    int status = parse(&tokens);
-    TEST_ASSERT_EQUAL(0, status);
+    struct ast_program *status = parse(&tokens); 
+    TEST_ASSERT_NOT_NULL(status);
 }
 
 int main() {
