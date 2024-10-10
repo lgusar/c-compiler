@@ -3,6 +3,6 @@
 
 #include "linked_list.h"
 
-int lex(char *file, struct linked_list tokens);
+struct linked_list *lex(char *file);
 
 #endif /* _LEXER_H */

@@ -98,12 +98,12 @@ void test_get_token_invalid() {
 void test_get_tokens() {
     char *input = "int main\n";
 
-    struct linked_list result;
-    int status = get_tokens(input, &result);
+    struct linked_list *result = linked_list_init();
+    int status = get_tokens(input, result);
 
     TEST_ASSERT_EQUAL(0, status);
 
-    struct node *p = result.head;
+    struct node *p = result->head;
     TEST_ASSERT_EQUAL(keyword, ((struct token *)p->val)->token_type);
     TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "int"));
     p = p->next;
@@ -115,12 +115,12 @@ void test_get_tokens() {
 void test_get_tokens_multiple_lines() {
     char *input = "int main() {\n\n}";
 
-    struct linked_list result;
-    int status = get_tokens(input, &result);
+    struct linked_list *result = linked_list_init();
+    int status = get_tokens(input, result);
 
     TEST_ASSERT_EQUAL(0, status);
 
-    struct node *p = result.head;
+    struct node *p = result->head;
     TEST_ASSERT_EQUAL(keyword, ((struct token *)p->val)->token_type);
     TEST_ASSERT_EQUAL(0, strcmp(((struct token *)p->val)->value, "int"));
     p = p->next;
@@ -148,34 +148,37 @@ void test_get_tokens_multiple_lines() {
 
 void test_get_tokens_all_token_types() {
     char *input = "int main(void) {\n\treturn 2;\n}";
-    struct linked_list result;
-    int status = get_tokens(input, &result);
+
+    struct linked_list *result = linked_list_init();
+    int status = get_tokens(input, result);
 
     TEST_ASSERT_EQUAL(0, status);
 }
 
 void test_get_tokens_ignore_singe_line_comment() {
     char *input = "//int main void";
-    struct linked_list result;
-    result.head = NULL;
-    int status = get_tokens(input, &result);
+
+    struct linked_list *result = linked_list_init();
+    int status = get_tokens(input, result);
 
     TEST_ASSERT_EQUAL(0, status);
-    TEST_ASSERT_NULL(result.head);
+    TEST_ASSERT_NULL(result->head);
 }
 
 void test_get_tokens_ignore_multiline_comment() {
     char *input = "/* this is a multiline comment\nthis is the second line */int main";
-    struct linked_list result;
-    int status = get_tokens(input, &result);
+
+    struct linked_list *result = linked_list_init();
+    int status = get_tokens(input, result);
 
     TEST_ASSERT_EQUAL(0, status);
 }
 
 void test_get_tokens_multiline_comment_without_end_backslash() {
     char *input = "/* this is a multiline comment\nthis is the second line *";
-    struct linked_list result;
-    int status = get_tokens(input, &result);
+
+    struct linked_list *result = linked_list_init();
+    int status = get_tokens(input, result);
 
     TEST_ASSERT_EQUAL(0, status);
 }
