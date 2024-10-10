@@ -93,6 +93,28 @@ int get_token(char **string, struct token *result) {
     return -1;
 }
 
+int get_tokens(char *string, struct linked_list *tokens) {
+    struct token token;
+    int status;
+    while ((status = get_token(&string, &token)) != 1) {
+        if (status == -1) {
+            fprintf(stderr, "get_token failed\n");
+            return 1;
+        }
+
+        if (token.token_type == undefined) {
+            continue;
+        }
+
+        struct token *tmp = malloc(sizeof(struct token));
+        *tmp = token;
+
+        linked_list_add(tokens, tmp);
+    }
+
+    return 0;
+}
+
 int clear_whitespace(char **p) {
     if (**p == ' ' || **p == '\n' || **p == '\t') {
         while (**p == ' ' || **p == '\n' || **p == '\t') {
@@ -110,7 +132,7 @@ int check_single_line_comment(char **p) {
         while (**p != '\n' && **p != EOF && **p != '\0') {
             *p += 1;
         }
-        
+
         return 0;
     }
 
@@ -131,37 +153,6 @@ int check_multi_line_comment(char **p) {
     }
 
     return 1;
-}
-
-int get_tokens(char *string, struct linked_list *tokens) {
-    struct node *last = NULL;
-
-    struct token token;
-    int status;
-    while ((status = get_token(&string, &token)) != 1) {
-        if (status == -1) {
-            fprintf(stderr, "get_token failed\n");
-            return 1;
-        }
-        if (token.token_type == undefined)
-            continue;
-        struct token *tmp = malloc(sizeof(struct token));
-        *tmp = token;
-
-        struct node *temp = malloc(sizeof(struct node));
-        temp->val = tmp;
-        temp->next = NULL;
-
-        if (last == NULL) {
-            tokens->head = temp;
-            last = temp;
-        } else {
-            last->next = temp;
-            last = temp;
-        }
-    }
-
-    return 0;
 }
 
 char *get_word(char *string) {
